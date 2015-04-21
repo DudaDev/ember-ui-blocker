@@ -42,7 +42,7 @@ export default Ember.Route.extend({
 ```
 
 ## Configuration
-* in `config/environment.js` add the following
+* You can deep-merge custom options with the [default options](https://github.com/DudaDev/ember-ui-blocker/blob/master/addon/defaults/options.js) by adding the following to `config/environment.js`
 ```javascript
 	'ember-ui-blocker': {
 		/* The default options are:
@@ -54,7 +54,8 @@ export default Ember.Route.extend({
 		*/
     }
 ```
-In addition, you can always pass options to every method as a last argument
+* In addition, you can always pass options to every method as a last argument.  
+These options will be deep-merged with the [default options](https://github.com/DudaDev/ember-ui-blocker/blob/master/addon/defaults/options.js) & the above custom options.
 ```javascript
 // app/some-route/route.js
 export default Ember.Route.extend({
