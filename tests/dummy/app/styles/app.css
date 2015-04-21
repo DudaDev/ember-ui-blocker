@@ -1,0 +1,8 @@
+.completed-step {
+	font-size: 60px;
+	margin: 50px auto 0 auto;
+}
+
+.blockOverlay {
+	background-color: #eaeaea !important;
+}
