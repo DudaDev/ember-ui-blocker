@@ -6,7 +6,9 @@ module.exports = {
   },
 
   afterInstall: function(options) {
-    this.addBowerPackageToProject('spin.js', '2.1.0');
-    return this.addBowerPackageToProject('blockUI', '2.70');
+    this.addBowerPackageToProject('spin.js', '2.1.0').then(function(){
+    	return this.addBowerPackageToProject('blockUI');
+    }.bind(this));
+    
   }
 };
