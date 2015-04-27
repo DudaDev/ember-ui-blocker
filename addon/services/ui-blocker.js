@@ -4,14 +4,14 @@ import defaultOptions from '../defaults/options';
 var $ = Ember.$;
 export default (Ember.Service || Ember.Object).extend({
 	options: defaultOptions,
-	block: function(options){
+	block: function(options) {
 		options = $.extend(true, {}, this.get('options'), options || {});
 		$.blockUI(options.blockUIOptions);
-		if (!options.disableSpinner){
+		if (!options.disableSpinner) {
 			$(options.spinnerSelector).spin(options.spinjsOptions);
 		}
 	},
-	unblock: function(options){
+	unblock: function(options) {
 		options = $.extend(true, {}, this.get('options'), options || {});
 		$.unblockUI();
 		$(options.spinnerSelector).spin(false);
@@ -22,7 +22,7 @@ export default (Ember.Service || Ember.Object).extend({
 		options = $.extend(true, {}, this.get('options'), options || {});
 		var promise = new Ember.RSVP.Promise(function(resolve) {
 			this.toggleProperty('isBlocking');
-			if (this.get('isBlocking')){
+			if (this.get('isBlocking')) {
 				this.block(options);
 			} else {
 				this.unblock(options);
@@ -37,7 +37,7 @@ export default (Ember.Service || Ember.Object).extend({
 		var promise = this.toggleBlocking(),
 			negativeDeferred = Ember.RSVP.defer(),
 			negativePromise = negativeDeferred.promise,
-			positivePromisesToAppend = this.get('positivePromisesNamesToAppend').map(function(promiseName){
+			positivePromisesToAppend = this.get('positivePromisesNamesToAppend').map(function(promiseName) {
 				return Ember.get(this, promiseName).bind(this);
 			}, this);
 		positiveFuncs = positiveFuncs || [];
@@ -50,11 +50,11 @@ export default (Ember.Service || Ember.Object).extend({
 		});
 		negativePromise['finally'](this.toggleBlocking.bind(this, options));
 
-		positivePromisesToAppend.forEach(function(positivePromiseToAppend){
+		positivePromisesToAppend.forEach(function(positivePromiseToAppend) {
 			promise = promise.then(positivePromiseToAppend);
 		});
 		promise = promise.then(this.toggleBlocking.bind(this, options));
-		promise['catch'](function(error){
+		promise['catch'](function(error) {
 			negativeDeferred.resolve(error);
 		});
 
@@ -64,5 +64,36 @@ export default (Ember.Service || Ember.Object).extend({
 		return function() {
 			return this.executeWithinBlocking(positiveFuncs, negativeFuncs);
 		}.bind(this);
+	},
+	blockUntilElementIsInDOM: function(options, blockOptions) {
+		return this.blockUntilConditionIsSatisfied($.extend({
+			conditionFn: this._elementIsInDOMConditionFn.bind(this)
+		}, options), blockOptions);
+	},
+	blockUntilConditionIsSatisfied: function(options, blockOptions) {
+		var intervalSubscriber,
+			deferred = Ember.RSVP.defer(),
+			timeCounter = 0;
+		options = options || {};
+		options.interval = options.interval || 500;
+		options.timeout = options.timeout || 30000;
+		options.conditionFn = options.conditionFn || function() {
+			return true;
+		};
+		this.block(blockOptions);
+		intervalSubscriber = window.setInterval(Ember.run.bind(this, function() {
+			timeCounter += options.interval;
+			if (options.conditionFn(options)) {
+				this.unblock();
+				window.clearInterval(intervalSubscriber);
+				deferred.resolve();
+			} else if (timeCounter > options.timeout) {
+				deferred.reject();
+			}
+		}), options.interval);
+		return deferred.promise;
+	},
+	_elementIsInDOMConditionFn: function(options) {
+		return $(options.selector).length > 0;
 	}
 });
