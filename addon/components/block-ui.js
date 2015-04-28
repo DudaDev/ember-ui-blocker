@@ -2,7 +2,7 @@ import Ember from 'ember';
 import layout from '../templates/components/block-ui';
 
 export default Ember.Component.extend(Ember.$.extend({
-	layout: layout
+	layout: layout,
 	startBlocking: function() {
 		this.get('uiBlocker').block();
 	}.on('didInsertElement'),
