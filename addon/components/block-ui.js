@@ -9,4 +9,6 @@ export default Ember.Component.extend(Ember.$.extend({
 	stopBlocking: function() {
 		this.get('uiBlocker').unblock();
 	}.on('willDestroyElement')
-}, (Ember.inject && Ember.inject.service) ? {uiBlocker: Ember.inject.service()} : {});
+}, (Ember.inject && Ember.inject.service) ? {
+	uiBlocker: Ember.inject.service()
+} : {}));
