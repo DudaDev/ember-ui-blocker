@@ -1,6 +1,6 @@
 {
   "name": "ember-ui-blocker",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "main": "index.js",
   "description": "The default blueprint for ember-cli addons.",
   "directories": {
