@@ -18,15 +18,15 @@ export default Ember.Route.extend({
 	actions: {
 		doSomethingAsyncAndBlock: function(){
 			this.get('uiBlocker').executeWhileBlocking([
-				//Positive promises. Will be executed sequently
-				promise1,
-				promise2,
-				promise3
+				//Positive Functions(!!!) which return promises(!!!). Will be executed sequently
+				promiseFn1,
+				promiseFn2,
+				promiseFn3
 			],[
-				//Negative promises. Will be executed sequently on a fail
-				promise4,
-				promise5,
-				promise6
+				//Negative Functions(!!!) which return promises(!!!). Will be executed sequently on a fail
+				promiseFn4,
+				promiseFn5,
+				promiseFn6
 			]).then(function(){
 				//Do something... or not
 			});
