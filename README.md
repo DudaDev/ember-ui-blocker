@@ -1,4 +1,4 @@
-# Ember-ui-blocker
+# Ember-ui-blocker [![Build Status](https://travis-ci.org/DudaDev/ember-ui-blocker.svg?branch=master)](https://travis-ci.org/DudaDev/ember-ui-blocker)
 
 Ember addon for UI blocking combined with a spinner.  
 Implemented with [block-ui](http://jquery.malsup.com/block/) & [spin.js](http://spin.js.org/)
