@@ -11,6 +11,11 @@ export default (Ember.Service || Ember.Object).extend({
 			$(options.spinnerSelector).spin(options.spinjsOptions);
 		}
 	},
+	setDefaultOptions: function(newDefaultOptions) {
+		newDefaultOptions = newDefaultOptions || {};
+		var options = this.get('options');
+		this.set('options', $.extend(true, {}, options, newDefaultOptions));
+	},
 	unblock: function(options) {
 		options = $.extend(true, {}, this.get('options'), options || {});
 		$.unblockUI();
@@ -34,7 +39,7 @@ export default (Ember.Service || Ember.Object).extend({
 		return promise;
 	},
 	executeWhileBlocking: function(positiveFuncs, negativeFuncs, options) {
-		var promise = this.toggleBlocking(),
+		var promise = this.toggleBlocking(options),
 			negativeDeferred = Ember.RSVP.defer(),
 			negativePromise = negativeDeferred.promise,
 			positivePromisesToAppend = this.get('positivePromisesNamesToAppend').map(function(promiseName) {

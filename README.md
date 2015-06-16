@@ -52,26 +52,40 @@ export default Ember.Route.extend({
 ```
 
 ## Configuration
-* You can deep-merge custom options with the [default options](https://github.com/DudaDev/ember-ui-blocker/blob/master/addon/defaults/options.js) by adding the following to `config/environment.js`
+* **Environment configuration**  (deep merge)  
+Deep-merge custom options with the [default options](https://github.com/DudaDev/ember-ui-blocker/blob/master/addon/defaults/options.js) by adding the following to `config/environment.js`
 ```javascript
 	'ember-ui-blocker': {
 		/* The default options are:
 			disableSpinner: false,
+
 			spinnerSelector: 'body',
+
 			blockDelay: 200, // minimum blocking delay for the method 'executeWhileBlocking'
 
-			//See options for http://jquery.malsup.com/block/#options
 			blockUIOptions: { ... }, 
 
-			//See options for http://fgnass.github.io/spin.js/#usage
-			spinjsOptions:  { .. } //See options for http://spin.js.org/
+			spinjsOptions:  { .. }
 		*/
     }
 ```
 [block-ui options reference](http://jquery.malsup.com/block/#options)  
 [spin.js options reference](http://fgnass.github.io/spin.js/#usage)
 
-* In addition, you can always pass options to every method as a last argument.  
+* **Change default options in runtime** (deep merge)  
+```javascript
+// app/services/some-service.js
+export default Ember.Service.extend({
+	uiBlocker: Ember.inject.service(),
+	init: function(){
+		//deep-merge new default options
+		this.get('uiBlocker').setDefaultOptions({/* your custom options*/});
+	}
+});
+```
+
+* **Method invocation**  (deep merge)  
+Pass options to every method as a last argument.  
 These options will be deep-merged with the [default options](https://github.com/DudaDev/ember-ui-blocker/blob/master/addon/defaults/options.js) & the above custom options.
 ```javascript
 // app/some-route/route.js
