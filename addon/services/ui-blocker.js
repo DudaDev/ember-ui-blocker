@@ -2,13 +2,15 @@ import Ember from 'ember';
 import defaultOptions from '../defaults/options';
 
 var $ = Ember.$;
+var hasSpinjs = typeof $.fn.spin === 'function' && typeof window.Spinner === 'function';
+
 export default (Ember.Service || Ember.Object).extend({
 	options: defaultOptions,
 	block: function(options) {
 		options = $.extend(true, {}, this.get('options'), options || {});
 		$.blockUI(options.blockUIOptions);
 		if (!options.disableSpinner) {
-			$(options.spinnerSelector).spin(options.spinjsOptions);
+			this.startSpin(options);
 		}
 	},
 	setDefaultOptions: function(newDefaultOptions) {
@@ -19,7 +21,17 @@ export default (Ember.Service || Ember.Object).extend({
 	unblock: function(options) {
 		options = $.extend(true, {}, this.get('options'), options || {});
 		$.unblockUI();
-		$(options.spinnerSelector).spin(false);
+		this.stopSpin(options);
+	},
+	startSpin: function(options) {
+		if (hasSpinjs) {
+			$(options.spinnerSelector).spin(options.spinjsOptions);	
+		}
+	},
+	stopSpin: function(options) {
+		if (hasSpinjs) {
+			$(options.spinnerSelector).spin(false);
+		}
 	},
 	isBlocking: false,
 	positivePromisesNamesToAppend: [],
